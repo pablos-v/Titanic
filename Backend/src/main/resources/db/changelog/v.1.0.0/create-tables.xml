@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+            http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.6.xsd">
+
+    <changeSet id="create-tables" author="pavel_kuzmin">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="RECORDS"/>
+            </not>
+        </preConditions>
+
+        <createTable schemaName="TITANIC" tableName="RECORDS">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="survived" type="boolean"/>
+            <column name="pclass" type="varchar(255)"/>
+            <column name="name" type="varchar(255)"/>
+            <column name="sex" type="varchar(255)"/>
+            <column name="age" type="double"/>
+            <column name="number_of_siblings_or_spouses_aboard" type="integer"/>
+            <column name="number_of_parents_or_children_aboard" type="integer"/>
+            <column name="fare" type="double"/>
+        </createTable>
+
+    </changeSet>
+
+</databaseChangeLog>
