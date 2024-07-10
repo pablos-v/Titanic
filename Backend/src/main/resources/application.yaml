@@ -1,15 +1,24 @@
 server:
-  port: 8081
+  port: 8092
 eureka:
   client:
     service-url:
       defaultZone: http://localhost:8761/eureka
 properties:
   URL: https://web.stanford.edu/class/archive/cs/cs109/cs109.1166/stuff/titanic.csv
+  adultAgeCriteria: 16
 
 spring:
   application:
     name: backend
+  cache:
+    type: redis
+    cache-names: redis-cache
+  data:
+    redis:
+      host: localhost
+      port: 6379
+      password: parole
   datasource:
     url: jdbc:h2:file:./data/mydb
     username: sa

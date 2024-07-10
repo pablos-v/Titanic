@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous"/>
+<!--    <link rel="stylesheet" href="/css/style.css"/>-->
+<!--    <script th:src="/js/script.js"></script>-->
+    <title> Список пассажиров Титаника</title>
+</head>
+<body>
+<h1>Записи</h1>
+<div  th:each="page : ${data.pages()}">
+            <th th:text="${data.sizeOfPage()}">sizeOfPage</th>
+            <th th:text="${data.pages().size()}">totalPages</th>
+            <th th:text="${data.sortingType()}">sortingType</th>
+            <th th:text="${data.survivedFilterOn()}">survivedFilterOn</th>
+            <th th:text="${data.isManFilterOn()}">isManFilterOn</th>
+            <th th:text="${data.isAdultFilterOn()}">isAdultFilterOn</th>
+            <th th:text="${data.noRelativesFilterOn()}">noRelativesFilterOn</th>
+            <th th:text="${data.totalFares()}">totalFares</th>
+            <th th:text="${data.totalWithRelatives()}">totalWithRelatives</th>
+            <th th:text="${data.totalSurvived()}">totalSurvived</th>
+    <table>
+<!--        <thead>-->
+<!--        <tr>-->
+<!--        </tr>-->
+<!--        </thead>-->
+        <tbody>
+            <tr th:each="record : ${page.records()}">
+                <td th:text="${record.toString()}"></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<!--<div th:if="${totalPages > 1}">-->
+<!--    <ul class="pagination">-->
+<!--        <li th:classappend="${currentPage == 0} ? 'disabled'" >-->
+<!--            <a th:href="@{/records(page=${currentPage - 1}, size=${size})}">Предыдущая</a>-->
+<!--        </li>-->
+<!--        <li th:each="i : ${#numbers.sequence(0, totalPages - 1)}"-->
+<!--            th:classappend="${currentPage == i} ? 'active'">-->
+<!--            <a th:href="@{/records(page=${i}, size=${size})}">[[${i + 1}]]</a>-->
+<!--        </li>-->
+<!--        <li th:classappend="${currentPage == totalPages - 1} ? 'disabled'" >-->
+<!--            <a th:href="@{/records(page=${currentPage + 1}, size=${size})}">Следующая</a>-->
+<!--        </li>-->
+<!--    </ul>-->
+<!--</div>-->
+
+</body>
+</html>

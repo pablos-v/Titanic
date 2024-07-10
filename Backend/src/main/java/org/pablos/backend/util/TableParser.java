@@ -18,7 +18,7 @@ import java.util.List;
 @Component
 public class TableParser {
 
-    private final ApplicationConfiguration configuration;
+    private final ApplicationProperties properties;
 
     /**
      * Скачивает csv-файл с данными о таблице и преобразует его в список объектов.
@@ -28,7 +28,7 @@ public class TableParser {
     public List<TableRecord> loadTitanicData() {
         List<TableRecord> records = new ArrayList<>();
         try (BufferedReader reader = new BufferedReader(
-                new InputStreamReader(new URL(configuration.tableUrl).openStream()))) {
+                new InputStreamReader(new URL(properties.tableUrl).openStream()))) {
             // Пропускаем заголовок
             reader.readLine();
 
