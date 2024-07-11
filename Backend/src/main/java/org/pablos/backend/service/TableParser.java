@@ -1,9 +1,10 @@
-package org.pablos.backend.util;
+package org.pablos.backend.service;
 
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.pablos.backend.domain.enums.PassengerClass;
 import org.pablos.backend.domain.model.TableRecord;
+import org.pablos.backend.util.ApplicationProperties;
 import org.springframework.stereotype.Component;
 
 import java.io.BufferedReader;

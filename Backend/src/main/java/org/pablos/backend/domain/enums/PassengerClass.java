@@ -1,5 +1,7 @@
 package org.pablos.backend.domain.enums;
 
-public enum PassengerClass {
+import java.io.Serializable;
+
+public enum PassengerClass implements Serializable {
     FIRST, SECOND, THIRD
 }

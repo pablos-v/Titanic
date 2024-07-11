@@ -9,5 +9,4 @@ public class ApplicationProperties {
     public String tableUrl;
     @Value("${properties.adultAgeCriteria}")
     public int adultAgeCriteria;
-
 }
