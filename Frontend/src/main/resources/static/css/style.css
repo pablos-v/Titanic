@@ -1,0 +1,73 @@
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    margin-top: 0px;
+}
+
+form {
+    background-color: #f8f9fa;
+    padding: 20px;
+    border-radius: 5px;
+}
+
+form button {
+    background-color: #6c757d;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+form button:hover {
+    background-color: #5a6268;
+}
+
+.form-row1, .form-row2 {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 10px;
+}
+
+.form-row1 label, .form-row2 label {
+    margin-right: 10px;
+}
+
+.form-row1 select, .form-row2 input[type="text"], .form-row2 input[type="checkbox"] {
+    margin-right: 20px;
+}
+
+.content {
+    margin: 20px;
+}
+
+.pagination {
+    text-align: center;
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+}
+
+.pagination button {
+    padding: 5px 10px;
+    margin: 0 5px;
+    cursor: pointer;
+    outline: 1px solid #494a4f;
+    border-radius: 1px;
+    border: none;
+}
+
+.hidden {
+    clip: rect(0 0 0 0);
+    clip-path: inset(50%);
+    height: 1px;
+    overflow: hidden;
+    position: absolute;
+    white-space: nowrap;
+    width: 1px;
+}
+
+.pagination button.active {
+    background-color: #4d5154;
+    color: white;
+}

@@ -33,25 +33,13 @@ public class TableRecordController {
             @RequestParam(value = "size", defaultValue = "50") int size,
             @RequestParam(value = "sort", defaultValue = "NAME_ASC") String sort,
             @RequestParam(value = "survived", defaultValue = "false") boolean survived,
-            @RequestParam(value = "isAdult", defaultValue = "false") boolean isAdult,
-            @RequestParam(value = "isMan", defaultValue = "false") boolean isMan,
-            @RequestParam(value = "noRelatives", defaultValue = "false") boolean noRelatives,
+            @RequestParam(value = "is_adult", defaultValue = "false") boolean isAdult,
+            @RequestParam(value = "is_man", defaultValue = "false") boolean isMan,
+            @RequestParam(value = "no_relatives", defaultValue = "false") boolean noRelatives,
             @RequestParam(value = "search", defaultValue = "") String search)  {
-
         PageDataDTO data = service.getPaginatedTableRecords(size, SortingType.valueOf(sort), survived,
                 isAdult, isMan, noRelatives, search);
 
-//        model.addAttribute("pages", data.pages());
-//        model.addAttribute("sizeOfPage", data.sizeOfPage());
-//        model.addAttribute("totalPages", data.pages().size());
-//        model.addAttribute("sortType", data.sortingType());
-//        model.addAttribute("survivedFilterOn", data.survivedFilterOn());
-//        model.addAttribute("isManFilterOn", data.isManFilterOn());
-//        model.addAttribute("isAdultFilterOn", data.isAdultFilterOn());
-//        model.addAttribute("noRelativesFilterOn", data.noRelativesFilterOn());
-//        model.addAttribute("totalFares", data.totalFares());
-//        model.addAttribute("totalWithRelatives", data.totalWithRelatives());
-//        model.addAttribute("totalSurvived", data.totalSurvived());
         model.addAttribute("data", data);
 
         return "records";
