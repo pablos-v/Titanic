@@ -6,4 +6,4 @@ eureka:
       defaultZone: http://localhost:8761/eureka
 spring:
   application:
-    name: frontend
+    name: titanic-frontend

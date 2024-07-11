@@ -10,7 +10,7 @@ properties:
 
 spring:
   application:
-    name: backend
+    name: titanic-backend
   cache:
     type: redis
     cache-names: redis-cache

@@ -1,8 +1,8 @@
 version: '3'
 
-networks:
-  app-network:
-    driver: bridge
+#networks:
+#  app-network:
+#    driver: bridge
 
 volumes:
   cache:
@@ -14,49 +14,55 @@ services:
 
   eureka:
     image: titanic-eureka
+    restart: always
     build:
       context: ./Eureka
       dockerfile: Dockerfile
     container_name: eureka
-    networks:
-      - app-network
+#    networks:
+#      - app-network
     ports:
       - "8761:8761"
 
   backend:
     image: titanic-backend
+    restart: always
     build:
       context: ./Backend
       dockerfile: Dockerfile
     container_name: backend
-    networks:
-      - app-network
+#    networks:
+#      - app-network
     depends_on:
       - eureka
       - db
       - redis
     ports:
       - '8092:8080'
+    environment:
+      - SERVER_PORT=8080
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db/postgres
 
   frontend:
     image: titanic-frontend
+    restart: always
     build:
       context: ./Frontend
       dockerfile: Dockerfile
     container_name: frontend
-    networks:
-      - app-network
+#    networks:
+#      - app-network
     depends_on:
       - backend
     ports:
-      - '8089:8080'
+      - '8089:8081'
 
   db:
     image: postgres:12-alpine
     restart: always
     container_name: postgres
-    networks:
-      - app-network
+#    networks:
+#      - app-network
     environment:
       - POSTGRES_USER=user
       - POSTGRES_PASSWORD=password
@@ -77,8 +83,8 @@ services:
     image: redis:7.2-rc-alpine
     restart: always
     container_name: redis
-    networks:
-      - app-network
+#    networks:
+#      - app-network
     ports:
       - '6379:6379'
     command: redis-server --save 20 1 --loglevel warning --requirepass parole
