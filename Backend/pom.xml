@@ -10,12 +10,13 @@
     </parent>
     <groupId>org.pablos</groupId>
     <artifactId>Backend</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.0.1</version>
     <name>Backend</name>
     <description>Backend</description>
     <properties>
         <java.version>17</java.version>
         <spring-cloud.version>2023.0.2</spring-cloud.version>
+        <preliquibase.version>1.5.0</preliquibase.version>
     </properties>
     <dependencies>
         <dependency>
@@ -33,6 +34,11 @@
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>net.lbruun.springboot</groupId>
+            <artifactId>preliquibase-spring-boot-starter</artifactId>
+            <version>${preliquibase.version}</version>
         </dependency>
 
         <dependency>
