@@ -38,6 +38,10 @@ public class TableRecordService {
      */
     public PageDataDTO getPaginatedTableRecords(int size, SortingType sort,
             boolean survived, boolean is_adult, boolean is_man, boolean no_relatives, String search) {
+
+        size = (size == 50 || size == 100 || size == 200) ? size : 50;
+        search = search.length() < 50 ? search : "";
+
         String url = getBackendIp() + "/api/record?size=" + size
                 + "&sort=" + sort // NAME_ASC; NAME_DESC; AGE_ASC; AGE_DESC; FARE_ASC; FARE_DESC
                 + "&survived=" + survived

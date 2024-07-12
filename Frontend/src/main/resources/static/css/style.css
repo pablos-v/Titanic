@@ -71,3 +71,23 @@ form button:hover {
     background-color: #4d5154;
     color: white;
 }
+
+.error-message {
+    font-size: 24px;
+    color: #fa4545;
+    text-align: center;
+    margin-top: 50px;
+}
+
+.main-button {
+    display: block;
+    width: 200px;
+    height: 50px;
+    background-color: #cccccc;
+    color: #333333;
+    font-size: 18px;
+    text-align: center;
+    line-height: 50px;
+    margin: 50px auto;
+    text-decoration: none;
+}
