@@ -1,13 +1,13 @@
 version: '3'
 
-#networks:
-#  app-network:
-#    driver: bridge
+networks:
+  app-network:
+    driver: bridge
 
 volumes:
   cache:
     driver: local
-  db-data:
+  db-data-2:
     driver: local
 
 services:
@@ -19,8 +19,8 @@ services:
       context: ./Eureka
       dockerfile: Dockerfile
     container_name: eureka
-#    networks:
-#      - app-network
+    networks:
+      - app-network
     ports:
       - "8761:8761"
 
@@ -31,20 +31,15 @@ services:
       context: ./Backend
       dockerfile: Dockerfile
     container_name: backend
-#    networks:
-#      - app-network
+    networks:
+      - app-network
     depends_on:
       db:
         condition: service_healthy
-      eureka:
-        condition: service_healthy
-      redis:
-        condition: service_healthy
     ports:
       - '8092:8092'
-    environment:
-      - SERVER_PORT=8080
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://db/postgres
+#    environment:
+#      - SPRING_DATASOURCE_URL=jdbc:postgresql://db/postgres
 
   frontend:
     image: titanic-frontend
@@ -53,8 +48,8 @@ services:
       context: ./Frontend
       dockerfile: Dockerfile
     container_name: frontend
-#    networks:
-#      - app-network
+    networks:
+      - app-network
     depends_on:
       - backend
     ports:
@@ -64,8 +59,8 @@ services:
     image: postgres:12-alpine
     restart: always
     container_name: postgres
-#    networks:
-#      - app-network
+    networks:
+      - app-network
     environment:
       - POSTGRES_USER=user
       - POSTGRES_PASSWORD=password
@@ -74,8 +69,8 @@ services:
       - '5434:5432'
     volumes:
       # инициация БД
-      - ./src/main/resources/db/create_schema.sql:/docker-entrypoint-initdb.d/create_schema.sql
-      - db-data:/var/lib/postgresql/data
+      - ./src/main/resources/db/create_schema.sql:/docker-entrypoint-initdb.d
+      - db-data-2:/var/lib/postgresql/data
     healthcheck:
       test: [ "CMD", "pg_isready", "-q", "-d", "postgres", "-U", "user" ]
       interval: 1s
@@ -86,8 +81,8 @@ services:
     image: redis:7.2-rc-alpine
     restart: always
     container_name: redis
-#    networks:
-#      - app-network
+    networks:
+      - app-network
     ports:
       - '6379:6379'
     command: redis-server --save 20 1 --loglevel warning --requirepass parole
