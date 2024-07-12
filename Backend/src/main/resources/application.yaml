@@ -3,7 +3,7 @@ server:
 eureka:
   client:
     service-url:
-      defaultZone: http://localhost:8761/eureka
+      defaultZone: http://eureka/eureka
 properties:
   URL: https://web.stanford.edu/class/archive/cs/cs109/cs109.1166/stuff/titanic.csv
   adultAgeCriteria: 16
@@ -16,11 +16,11 @@ spring:
     cache-names: redis-cache
   data:
     redis:
-      host: localhost
+      host: redis
       port: 6379
       password: parole
   datasource:
-    url: jdbc:postgresql://localhost:5434/postgres
+    url: jdbc:postgresql://db/postgres
     username: user
     password: password
     driverClassName: org.postgresql.Driver
