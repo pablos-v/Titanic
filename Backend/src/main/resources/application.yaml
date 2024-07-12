@@ -20,13 +20,10 @@ spring:
       port: 6379
       password: parole
   datasource:
-    url: jdbc:h2:file:./data/mydb
-    username: sa
-    password:
-#    url: jdbc:postgresql://localhost:5432/postgres
-#    username: user
-#    password: password
-#    driverClassName: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5434/postgres
+    username: user
+    password: password
+    driverClassName: org.postgresql.Driver
   jpa:
     show-sql: true
     hibernate:

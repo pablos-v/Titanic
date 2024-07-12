@@ -70,8 +70,8 @@
                         <th>FARE</th>
                     </tr>
                     </thead>
-                    <tbody th:each="page : ${data.pages()}">
-                    <tr th:each="record : ${page.records()}">
+                    <tbody>
+                    <tr th:each="record : ${data.records()}">
                         <td th:text="${record.id()}"></td>
                         <td th:text="${record.survived()}"></td>
                         <td th:text="${record.pclass()}"></td>

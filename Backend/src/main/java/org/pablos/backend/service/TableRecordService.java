@@ -2,7 +2,6 @@ package org.pablos.backend.service;
 
 import jakarta.annotation.PostConstruct;
 import lombok.Data;
-import org.pablos.backend.domain.dto.PageDTO;
 import org.pablos.backend.domain.dto.PageDataDTO;
 import org.pablos.backend.domain.dto.RequestDTO;
 import org.pablos.backend.domain.enums.SortingType;
@@ -12,7 +11,6 @@ import org.pablos.backend.domain.mapper.TableRecordMapper;
 import org.pablos.backend.domain.model.TableRecord;
 import org.pablos.backend.repository.TableRecordRepository;
 import org.pablos.backend.util.ApplicationProperties;
-import org.pablos.backend.util.TableParser;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
@@ -62,17 +60,14 @@ public class TableRecordService {
         int totalWithRelatives = (int) records.stream().filter(person ->
                 person.numberOfSiblingsOrSpousesAboard() + person.numberOfParentsOrChildrenAboard() >0).count();
 
-        // разбить по size и записать в page
-        List<PageDTO> pages = pagesMaker(request.size(), records);
-
-        return new PageDataDTO(pages, request.size(), request.sortingType(), request.survived(), request.isMan(),
+        return new PageDataDTO(records, request.size(), request.sortingType(), request.survived(), request.isMan(),
                 request.isAdult(), request.noRelatives(), totalFares, totalWithRelatives, totalSurvived);
     }
 
     private List<TableRecordDTO> tableMaker(String search, boolean survivedFilterOn, boolean isAdultFilterOn,
             boolean isManFilterOn, boolean noRelativesFilterOn, SortingType sortingType) {
 
-        List<TableRecord> records = new ArrayList<>(
+        ArrayList<TableRecord> records = new ArrayList<>(
                 getAll().stream()
                 .filter(person -> Objects.equals(search, "") || person.getName().contains(search))
                 .filter(person -> !survivedFilterOn || person.isSurvived())
@@ -102,12 +97,4 @@ public class TableRecordService {
         records.sort(comparator);
     }
 
-    private List<PageDTO> pagesMaker(int size, List<TableRecordDTO> records) {
-        List<PageDTO> pages = new ArrayList<>();
-        for (int i = 0; i < records.size(); i += size) {
-            int end = Math.min(records.size(), i + size);
-            pages.add(new PageDTO(records.subList(i, end)));
-        }
-        return pages;
-    }
 }

@@ -1,6 +1,8 @@
 package org.pablos.backend.domain.enums;
 
-public enum SortingType {
+import java.io.Serializable;
+
+public enum SortingType implements Serializable {
     NAME_ASC,
     NAME_DESC,
     AGE_ASC,
