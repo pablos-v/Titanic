@@ -8,6 +8,9 @@ import org.pablos.backend.domain.enums.PassengerClass;
 
 import java.io.Serializable;
 
+/**
+ * Сущность записи в таблице
+ */
 @Data
 @Entity
 @NoArgsConstructor

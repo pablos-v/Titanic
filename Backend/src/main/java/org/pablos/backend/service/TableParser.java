@@ -14,6 +14,10 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+
+/**
+ * Парсер csv-файла с данными о таблице.
+ */
 @Slf4j
 @Data
 @Component
@@ -24,9 +28,9 @@ public class TableParser {
     /**
      * Скачивает csv-файл с данными о таблице и преобразует его в список объектов.
      * @return список объектов
-     * @throws IOException если произошла ошибка при скачивании или чтении файла
+     * @throws RuntimeException если произошла ошибка при скачивании или чтении файла
      */
-    public List<TableRecord> loadTitanicData() {
+    public List<TableRecord> loadTitanicData() throws RuntimeException{
         List<TableRecord> records = new ArrayList<>();
         try (BufferedReader reader = new BufferedReader(
                 new InputStreamReader(new URL(properties.tableUrl).openStream()))) {

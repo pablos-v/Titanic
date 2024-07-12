@@ -4,9 +4,8 @@ import jakarta.annotation.PostConstruct;
 import lombok.Data;
 import org.pablos.backend.domain.dto.PageDataDTO;
 import org.pablos.backend.domain.dto.RequestDTO;
-import org.pablos.backend.domain.enums.SortingType;
 import org.pablos.backend.domain.dto.TableRecordDTO;
-import org.pablos.backend.domain.exception.RecordNotFoundException;
+import org.pablos.backend.domain.enums.SortingType;
 import org.pablos.backend.domain.mapper.TableRecordMapper;
 import org.pablos.backend.domain.model.TableRecord;
 import org.pablos.backend.repository.TableRecordRepository;
@@ -18,7 +17,9 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
-
+/**
+ * Сервис для работы с записями.
+ */
 @Service
 @Data
 public class TableRecordService {
@@ -27,6 +28,9 @@ public class TableRecordService {
     private final TableRecordRepository repository;
     private final TableParser parser;
 
+    /**
+     * Наполняет БД. Если в таблице нет записей, загружает данные.
+     */
     @PostConstruct
     private void init() {
         if (getAll().isEmpty()) {
@@ -34,21 +38,34 @@ public class TableRecordService {
         }
     }
 
-    public TableRecord getById(Long id) {
-        return repository.findById(id).orElseThrow(RecordNotFoundException::new);
-    }
+    /**
+     * Возвращает все записи из таблицы.
+     *
+     * @return список всех записей.
+     */
     public List<TableRecord> getAll() {
         return repository.findAll();
     }
 
+    /**
+     * Сохраняет все записи в таблицу.
+     *
+     * @param records список записей для сохранения.
+     */
     public void saveAll(List<TableRecord> records) {
         repository.saveAll(records);
     }
+
+    /**
+     * Формирут и возвращает данные для отображения на странице.
+     * Кэширует получаемые запросы и ответы.
+     *
+     * @param request объект запроса с параметрами фильтрации и сортировки.
+     * @return объект PageDataDTO с данными для отображения на странице.
+     */
     @Cacheable(value = "TableRecordService::getPageData", key = "#request")
     public PageDataDTO getPageData(RequestDTO request) {
-        // TODO валидировать
 
-        // формировать список в зависимости от поиска и фильтров, сортировать
         List<TableRecordDTO> records = tableMaker(request.search(), request.survived(), request.isAdult(),
                 request.isMan(), request.noRelatives(), request.sortingType());
 
@@ -64,6 +81,20 @@ public class TableRecordService {
                 request.isAdult(), request.noRelatives(), totalFares, totalWithRelatives, totalSurvived);
     }
 
+    /**
+     * Формирует список записей в зависимости от параметров поиска и фильтров.
+     * Перед отдачей сортирует и маппит в DTO.
+     *
+     * @param search             строка поиска.
+     * @param survivedFilterOn   указатель на включение фильтра по выживанию.
+     * @param isAdultFilterOn    указатель на включение фильтра по возрасту.
+     * @param isManFilterOn      указатель на включение фильтра по полу.
+     * @param noRelativesFilterOn указатель на включение фильтра по наличию родственников.
+     * @param sortingType        тип сортировки.
+     * @return список записей, удовлетворяющих условиям поиска и фильтров.
+     *
+     * @see org.pablos.backend.domain.enums.SortingType
+     */
     private List<TableRecordDTO> tableMaker(String search, boolean survivedFilterOn, boolean isAdultFilterOn,
             boolean isManFilterOn, boolean noRelativesFilterOn, SortingType sortingType) {
 
@@ -83,6 +114,12 @@ public class TableRecordService {
         return TableRecordMapper.toListDto(records);
     }
 
+    /**
+     * Сортирует записи в зависимости от типа сортировки.
+     *
+     * @param records      список записей для сортировки.
+     * @param sortingType  тип сортировки.
+     */
     private void sortRecordsWith(List<TableRecord> records, SortingType sortingType) {
         Comparator<TableRecord> comparator;
         switch (sortingType) {

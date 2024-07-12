@@ -11,6 +11,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * Контроллер REST API для работы с таблицей.
+ */
 @RestController
 @RequestMapping("/api/record")
 @Data
@@ -18,6 +21,19 @@ public class RESTController {
 
     private final TableRecordService recordService;
 
+    /**
+     * Получает запрос вида
+     * /api/record?size=100&sort=NAME_DESC&survived=true&is_adult=true&is_man=true&no_relatives=true&search=text
+     * Формирует объект запроса RequestDTO и отсылает запрос сервису TableRecordService.
+     * @param size размер страницы
+     * @param sort порядок сортировки
+     * @param survived признак фильтрации по выжившим
+     * @param isAdult признак фильтрации по совершеннолетним
+     * @param isMan признак фильтрации по полу
+     * @param noRelatives признак фильтрации по родственникам
+     * @param search текст поиска
+     * @return PageDataDTO
+     */
     @GetMapping
     public ResponseEntity<PageDataDTO> getPages(
             @RequestParam(value = "size") int size,
@@ -28,15 +44,8 @@ public class RESTController {
             @RequestParam(value = "no_relatives") boolean noRelatives,
             @RequestParam(value = "search") String search) {
 
-        PageDataDTO data = null;
-        // TODO обработку ошибок при валидации
-        try {
-            RequestDTO request = new RequestDTO(size, SortingType.valueOf(sort),
-                    survived, isAdult, isMan, noRelatives, search);
-            data = recordService.getPageData(request);
-            return ResponseEntity.ok(data);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        RequestDTO request = new RequestDTO(size, SortingType.valueOf(sort), survived,
+                isAdult, isMan, noRelatives, search);
+        return ResponseEntity.ok(recordService.getPageData(request));
     }
 }
