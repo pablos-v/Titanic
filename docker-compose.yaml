@@ -34,11 +34,14 @@ services:
 #    networks:
 #      - app-network
     depends_on:
-      - eureka
-      - db
-      - redis
+      db:
+        condition: service_healthy
+      eureka:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
     ports:
-      - '8092:8080'
+      - '8092:8092'
     environment:
       - SERVER_PORT=8080
       - SPRING_DATASOURCE_URL=jdbc:postgresql://db/postgres
@@ -55,7 +58,7 @@ services:
     depends_on:
       - backend
     ports:
-      - '8089:8081'
+      - '8089:8089'
 
   db:
     image: postgres:12-alpine
