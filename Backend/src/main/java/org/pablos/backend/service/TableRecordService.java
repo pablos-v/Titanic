@@ -6,6 +6,8 @@ import org.pablos.backend.domain.dto.PageDataDTO;
 import org.pablos.backend.domain.dto.RequestDTO;
 import org.pablos.backend.domain.dto.TableRecordDTO;
 import org.pablos.backend.domain.enums.SortingType;
+import org.pablos.backend.domain.exception.SearchLengthException;
+import org.pablos.backend.domain.exception.SizeException;
 import org.pablos.backend.domain.mapper.TableRecordMapper;
 import org.pablos.backend.domain.model.TableRecord;
 import org.pablos.backend.repository.TableRecordRepository;
@@ -65,6 +67,7 @@ public class TableRecordService {
      */
     @Cacheable(value = "TableRecordService::getPageData", key = "#request")
     public PageDataDTO getPageData(RequestDTO request) {
+        validate(request);
 
         List<TableRecordDTO> records = tableMaker(request.search(), request.survived(), request.isAdult(),
                 request.isMan(), request.noRelatives(), request.sortingType());
@@ -79,6 +82,17 @@ public class TableRecordService {
 
         return new PageDataDTO(records, request.size(), request.sortingType(), request.survived(), request.isMan(),
                 request.isAdult(), request.noRelatives(), totalFares, totalWithRelatives, totalSurvived);
+    }
+
+    /**
+     * Валидатор запроса. Критерии 50, 100, 200 - взяты просто так, если нужно, можно вынести
+     * их в .env файл и передавать сюда через {@link org.pablos.backend.util.ApplicationProperties}
+     *
+     * @param request объект запроса
+     */
+    private void validate(RequestDTO request) {
+        if (request.size() != 50 && request.size() != 100 && request.size() != 200) throw new SizeException();
+        if (request.search().length() > 50) throw new SearchLengthException();
     }
 
     /**
@@ -97,7 +111,7 @@ public class TableRecordService {
      */
     private List<TableRecordDTO> tableMaker(String search, boolean survivedFilterOn, boolean isAdultFilterOn,
             boolean isManFilterOn, boolean noRelativesFilterOn, SortingType sortingType) {
-
+        // сразу в ArrayList, чтобы не ругался при сортировке
         ArrayList<TableRecord> records = new ArrayList<>(
                 getAll().stream()
                 .filter(person -> Objects.equals(search, "") || person.getName().contains(search))
