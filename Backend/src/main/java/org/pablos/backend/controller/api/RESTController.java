@@ -4,6 +4,7 @@ import lombok.Data;
 import org.pablos.backend.domain.dto.PageDataDTO;
 import org.pablos.backend.domain.dto.RequestDTO;
 import org.pablos.backend.domain.enums.SortingType;
+import org.pablos.backend.domain.exception.SortingTypeException;
 import org.pablos.backend.service.TableRecordService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -36,16 +37,20 @@ public class RESTController {
      */
     @GetMapping
     public ResponseEntity<PageDataDTO> getPages(
-            @RequestParam(value = "size") int size,
-            @RequestParam(value = "sort") String sort,
-            @RequestParam(value = "survived") boolean survived,
-            @RequestParam(value = "is_adult") boolean isAdult,
-            @RequestParam(value = "is_man") boolean isMan,
-            @RequestParam(value = "no_relatives") boolean noRelatives,
-            @RequestParam(value = "search") String search) {
+            @RequestParam(value = "size", defaultValue = "50") int size,
+            @RequestParam(value = "sort", defaultValue = "NAME_ASC") String sort,
+            @RequestParam(value = "survived", defaultValue = "false") boolean survived,
+            @RequestParam(value = "is_adult", defaultValue = "false") boolean isAdult,
+            @RequestParam(value = "is_man", defaultValue = "false") boolean isMan,
+            @RequestParam(value = "no_relatives", defaultValue = "false") boolean noRelatives,
+            @RequestParam(value = "search", defaultValue = "") String search)  {
 
-        RequestDTO request = new RequestDTO(size, SortingType.valueOf(sort), survived,
-                isAdult, isMan, noRelatives, search);
-        return ResponseEntity.ok(recordService.getPageData(request));
+        try {
+            RequestDTO request = new RequestDTO(size, SortingType.valueOf(sort), survived,
+                    isAdult, isMan, noRelatives, search);
+            return ResponseEntity.ok(recordService.getPageData(request));
+        } catch (IllegalArgumentException e) {
+            throw new SortingTypeException();
+        }
     }
 }
