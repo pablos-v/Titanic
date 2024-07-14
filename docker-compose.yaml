@@ -3,8 +3,6 @@ version: '3'
 networks:
   discovery-net:
     driver: bridge
-  frontend-net:
-    driver: bridge
   backend-net:
     driver: bridge
 
@@ -36,7 +34,6 @@ services:
     networks:
       - discovery-net
       - backend-net
-      - frontend-net
     depends_on:
       - eureka
       - db
@@ -57,7 +54,6 @@ services:
     container_name: frontend
     networks:
       - discovery-net
-      - frontend-net
     depends_on:
       - backend
     ports:
