@@ -1,7 +1,11 @@
 version: '3'
 
 networks:
-  app-network:
+  discovery-net:
+    driver: bridge
+  frontend-net:
+    driver: bridge
+  backend-net:
     driver: bridge
 
 volumes:
@@ -11,52 +15,63 @@ volumes:
     driver: local
 
 services:
-#
-#  eureka:
-#    image: titanic-eureka
-#    build:
-#      context: ./Eureka
-#      dockerfile: Dockerfile
-#    container_name: eureka
-#    networks:
-#      - app-network
-#    ports:
-#      - "8761:8761"
-#
-#  backend:
-#    image: titanic-backend
-#    build:
-#      context: ./Backend
-#      dockerfile: Dockerfile
-#    container_name: backend
-#    networks:
-#      - app-network
-#    depends_on:
-#      - eureka
-#      - db
-#      - redis
-#    ports:
-#      - '8092:8092'
-#
-#  frontend:
-#    image: titanic-frontend
-#    build:
-#      context: ./Frontend
-#      dockerfile: Dockerfile
-#    container_name: frontend
-#    networks:
-#      - app-network
-#    depends_on:
-#      - backend
-#    ports:
-#      - '8089:8089'
+
+  eureka:
+    image: titanic-eureka
+    build:
+      context: ./Eureka
+      dockerfile: Dockerfile
+    container_name: eureka-server
+    networks:
+      - discovery-net
+    ports:
+      - '8761:8761'
+
+  backend:
+    image: titanic-backend
+    build:
+      context: ./Backend
+      dockerfile: Dockerfile
+    container_name: backend
+    networks:
+      - discovery-net
+      - backend-net
+      - frontend-net
+    depends_on:
+      - eureka
+      - db
+      - redis
+    ports:
+      - '8092:8092'
+    environment:
+      - SERVER_PORT=8092
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db-postgres/postgres
+      - SPRING_DATA_REDIS_HOST=db-redis
+      - EUREKA.CLIENT.SERVICEURL.DEFAULTZONE=http://eureka-server:8761/eureka/
+
+  frontend:
+    image: titanic-frontend
+    build:
+      context: ./Frontend
+      dockerfile: Dockerfile
+    container_name: frontend
+    networks:
+      - discovery-net
+      - frontend-net
+    depends_on:
+      - backend
+    ports:
+      - '8089:8089'
+    environment:
+      - SERVER_PORT=8089
+      - EUREKA.CLIENT.SERVICEURL.DEFAULTZONE=http://eureka-server:8761/eureka/
 
   db:
     image: postgres:12-alpine
     restart: always
-    container_name: postgres
+    container_name: db-postgres
     networks:
-      - app-network
+      - backend-net
     environment:
       - POSTGRES_USER=user
       - POSTGRES_PASSWORD=password
@@ -65,18 +80,13 @@ services:
       - '5434:5432'
     volumes:
       - db-data:/var/lib/postgresql/data
-    healthcheck:
-      test: [ "CMD", "pg_isready", "-q", "-d", "postgres", "-U", "user" ]
-      interval: 1s
-      timeout: 5s
-      retries: 10
 
   redis:
     image: redis:7.2-rc-alpine
     restart: always
-    container_name: redis
+    container_name: db-redis
     networks:
-      - app-network
+      - backend-net
     ports:
       - '6379:6379'
     command: redis-server --save 20 1 --loglevel warning --requirepass parole
