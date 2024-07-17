@@ -34,7 +34,7 @@
 ## Задание выполнено
 
 ### Описание проведённых работ
-- Приложение работает на Spring Cloud: 3 отдельных микросервиса (Eureka, Backend, Frontend).
+- Приложение многомодульное (Eureka, Backend, Frontend, Redis, PostgreSQL).
 - Бэкенд работает c БД PostgreSQL 12 посредством Spring Data JPA. 
 - Миграциями управляет Liquibase.
 - Реализовано кэширование с помощью Redis. 
